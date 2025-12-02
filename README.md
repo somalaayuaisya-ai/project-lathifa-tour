@@ -1,59 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+ 🌙 Lathifa Tour – Travel Haji & Umroh  
+Aplikasi Website Travel Haji dan Umroh Berbasis Laravel 12 & Livewire
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+ 📝 Deskripsi Singkat
+Lathifa Tour adalah aplikasi web yang dirancang untuk memudahkan jamaah dalam mencari, membandingkan, dan mendaftar paket Haji dan Umroh. Sistem ini juga membantu admin dalam mengelola data paket, inquiry, testimoni, dan proses bisnis lainnya secara lebih cepat, aman, dan terstruktur. Dengan tampilan modern dan fitur lengkap, aplikasi ini mendukung pelayanan travel agar lebih profesional dan efisien.
 
-## About Laravel
+✨ Fitur Utama
+- **Form Inquiry (Lead Generation)**  
+  Jamaah dapat mengirimkan pertanyaan atau minat paket, dengan notifikasi otomatis ke admin.
+- **Galeri Foto & Video Perjalanan**  
+  Menampilkan dokumentasi perjalanan untuk meningkatkan kepercayaan jamaah.
+- **Blog Artikel & Panduan Ibadah**  
+  Admin dapat memposting artikel seputar manasik, tips perjalanan, dan update terbaru.
+- **Filter Paket (Tanggal, Harga, Durasi)**  
+  Memudahkan jamaah menemukan paket sesuai kebutuhan.
+- **Pencarian Paket**  
+  Fitur search cepat berdasarkan nama paket atau kategori.
+- **Tampilan Itinerary Detail per Hari**  
+  Setiap paket memiliki detail kegiatan harian yang jelas.
+- **Halaman Testimoni Jamaah (User-facing)**  
+  Menampilkan ulasan yang meningkatkan kredibilitas travel.
+- **Ekspor Daftar Pendaftaran (Admin)**  
+  Admin dapat mengekspor data ke Excel untuk laporan.
+- **Sistem Notifikasi (WA/Email setelah Inquiry)**  
+  Inquiry langsung terkirim ke admin dan jamaah sebagai konfirmasi.
+- **Halaman FAQ Interaktif**  
+  Menjawab pertanyaan umum secara cepat dan sederhana.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+ 🛠 Teknologi yang Digunakan
+- **Laravel 12** – Framework utama backend  
+- **Livewire** – Komponen interaktif tanpa perlu JavaScript berat  
+- **TailwindCSS** – Styling modern dan responsif  
+- **MySQL** – Sistem database  
+- **Spatie Permissions (opsional)** – Manajemen role & permission  
+- **Laravel Excel (opsional)** – Ekspor data pendaftaran  
+- **API WhatsApp / Mail** – Notifikasi inquiry  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+ ⚙ Cara Instalasi
+Pastikan sudah terinstall:
+- PHP 8.2+
+- Composer
+- MySQL
+- Node.js & NPM
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Clone Repository
+bash
+git clone [https://github.com/username/lathifa-tour.git](https://github.com/somalaayuaisya-ai/project-lathifa-tour.git  )
+cd lathifa-tour
+`
 
-## Learning Laravel
+2. Install Dependencies
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+bash
+composer install
+npm install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Copy File Environment
 
-## Laravel Sponsors
+bash
+cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. Generate App Key
 
-### Premium Partners
+bash
+php artisan key:generate
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5. Konfigurasi Database
 
-## Contributing
+Edit `.env`:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+DB_DATABASE=lathifatour
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Code of Conduct
+6. Migrasi Database
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+bash
+php artisan migrate --seed
 
-## Security Vulnerabilities
+7. Compile Frontend
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+bash
+npm run build
 
-## License
+▶ Cara Menjalankan Project
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Jalankan server Laravel:
+
+bash
+php artisan serve
+
+Jika menggunakan Vite untuk pengembangan:
+
+bash
+npm run dev
+
+Akses melalui:
+
+http://localhost:8000
