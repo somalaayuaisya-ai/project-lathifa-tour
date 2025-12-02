@@ -1,0 +1,118 @@
+// ===================================================
+// PROJECT: WEB TRAVEL UMROH (FINAL MVP VERSION)
+// Features: Admin/User Roles, Simple Pricing, Wishlist, Gallery
+// ===================================================
+
+Enum user_role {
+  admin
+  user
+}
+
+Enum inquiry_status {
+  new
+  contacted
+  spam
+}
+
+// 1. USERS & AUTH
+Table users {
+  id int [pk, increment]
+  name varchar(255)
+  email varchar(255) [unique]
+  password varchar(255)
+  phone varchar(20) [null, note: "Wajib untuk user/jamaah"]
+  role user_role [default: 'user']
+  avatar_url varchar(255) [null]
+  created_at timestamp
+}
+
+// 2. PACKAGES (CORE)
+Table packages {
+  id int [pk, increment]
+  title varchar(255)
+  slug varchar(255) [unique]
+  
+  // Harga Simplifikasi (Tanpa tabel varian terpisah)
+  price_quad decimal(15, 2) [note: "Sekamar Ber-4"]
+  price_triple decimal(15, 2) [note: "Sekamar Ber-3"]
+  price_double decimal(15, 2) [note: "Sekamar Ber-2"]
+  
+  departure_date date
+  duration_days int [default: 9]
+  
+  // Info Fasilitas (Text Only)
+  hotel_makkah varchar(255)
+  hotel_madinah varchar(255)
+  airline_name varchar(255)
+  
+  featured_image varchar(255) [note: "Gambar Utama (Thumbnail)"]
+  description text
+  
+  is_featured boolean [default: false]
+  is_active boolean [default: true]
+  created_at timestamp
+}
+
+// 3. PACKAGE DETAILS
+Table itineraries {
+  id int [pk, increment]
+  package_id int [ref: > packages.id]
+  day_number int
+  title varchar(255)
+  description text
+}
+
+Table package_galleries {
+  id int [pk, increment]
+  package_id int [ref: > packages.id]
+  image_url varchar(255)
+  caption varchar(255) [null]
+}
+
+// 4. USER INTERACTION
+Table package_inquiries {
+  id int [pk, increment]
+  package_id int [ref: > packages.id]
+  user_id int [ref: > users.id, null, note: "Bisa null jika tamu"]
+  
+  // Jika user belum login (Tamu)
+  guest_name varchar(255) [null]
+  guest_phone varchar(50) [null]
+  
+  message text
+  status inquiry_status [default: 'new']
+  created_at timestamp
+}
+
+Table bookmarks {
+  user_id int [ref: > users.id]
+  package_id int [ref: > packages.id]
+  created_at timestamp
+  
+  indexes {
+    (user_id, package_id) [pk] // Composite PK
+  }
+}
+
+// 5. TRUST & CONTENT
+Table testimonials {
+  id int [pk, increment]
+  user_id int [ref: > users.id, null]
+  name varchar(255) [note: "Nama penampil"]
+  job_title varchar(100) [null]
+  content text
+  rating int [note: "1-5"]
+  avatar_url varchar(255)
+  is_show boolean [default: true]
+}
+
+Table posts {
+  id int [pk, increment]
+  author_id int [ref: > users.id]
+  title varchar(255)
+  slug varchar(255) [unique]
+  content text
+  thumbnail varchar(255)
+  status varchar(20) [default: 'published']
+  created_at timestamp
+}

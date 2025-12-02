@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lathifa Tour | Perjalanan Ibadah Nyaman & Amanah</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6', // Teal Base
+                            800: '#115e59', // Deep Teal
+                            900: '#0f4c48', // Darkest Teal
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b', // Gold Base
+                            600: '#d97706', // Dark Gold
+                        },
+                        sand: '#FFFCF2', 
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    
+    <style>
+        /* @theme simulation for v4 compatibility styling */
+        :root {
+            --color-primary: #14b8a6;
+            --color-primary-dark: #115e59;
+            --color-gold: #f59e0b;
+        }
+        
+        [x-cloak] { display: none !important; }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Smooth text gradient */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #115e59, #14b8a6);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-600 bg-sand antialiased" 
+      x-data="lathifaApp()" 
+      x-init="initApp()">
+
+    <nav class="fixed w-full z-50 transition-all duration-300" 
+         :class="{'bg-white/95 backdrop-blur-md shadow-soft py-3': scrolled, 'bg-transparent py-6': !scrolled}"
+         @scroll.window="scrolled = (window.pageYOffset > 20)">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-800 to-primary-500 rounded-tr-2xl rounded-bl-2xl flex items-center justify-center text-white font-serif font-bold text-xl shadow-lg">L</div>
+                    <div>
+                        <span class="block text-xl font-serif font-bold leading-none" :class="{'text-primary-900': scrolled, 'text-white': !scrolled}">Lathifa</span>
+                        <span class="text-[0.65rem] uppercase tracking-[0.2em] font-medium" :class="{'text-gold-600': scrolled, 'text-white/80': !scrolled}">Tour & Travel</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-sm font-medium hover:text-gold-500 transition" :class="{'text-gray-700': scrolled, 'text-white/90': !scrolled}">Beranda</a>
+                    <a href="#packages" class="text-sm font-medium hover:text-gold-500 transition" :class="{'text-gray-700': scrolled, 'text-white/90': !scrolled}">Paket Umroh</a>
+                    
+                    <div class="relative cursor-pointer group">
+                        <svg class="w-6 h-6 transition" :class="{'text-gray-700': scrolled, 'text-white': !scrolled}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        <span x-show="wishlist.length > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center" x-text="wishlist.length"></span>
+                    </div>
+
+                    <div class="flex items-center gap-3 border-l pl-6 border-gray-300/30">
+                        <button class="text-sm font-semibold" :class="{'text-primary-800': scrolled, 'text-white': !scrolled}">Masuk</button>
+                        <button class="px-5 py-2 rounded-full text-sm font-bold transition shadow-lg transform hover:-translate-y-0.5"
+                           :class="{'bg-primary-800 text-white hover:bg-primary-900': scrolled, 'bg-white text-primary-900 hover:bg-gray-100': !scrolled}">
+                            Daftar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-b from-primary-900/70 via-primary-900/40 to-sand"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-20">
+            <div class="inline-block mb-4 px-4 py-1 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white text-sm font-medium">
+                ✨ Izin Resmi PPIU No. 123/2024
+            </div>
+            <h1 class="text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight drop-shadow-lg">
+                Rindu Baitullah? <br> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-200 italic">Wujudkan Sekarang</span>
+            </h1>
+            <p class="text-lg text-white/90 mb-10 font-light max-w-2xl mx-auto">
+                Kami menyediakan paket umroh dengan fasilitas hotel terbaik di Makkah & Madinah, dibimbing sesuai sunnah.
+            </p>
+            
+            <div class="bg-white p-2 rounded-2xl shadow-2xl max-w-3xl mx-auto flex flex-col md:flex-row gap-2">
+                <div class="flex-1 px-4 py-2 border-b md:border-b-0 md:border-r border-gray-100 text-left">
+                    <label class="text-xs font-bold text-gray-400 uppercase">Keberangkatan</label>
+                    <select class="w-full bg-transparent font-bold text-gray-800 focus:outline-none cursor-pointer mt-1">
+                        <option>Semua Bulan</option>
+                        <option>Maret 2025 (Ramadhan)</option>
+                        <option>Mei 2025 (Syawal)</option>
+                    </select>
+                </div>
+                <div class="flex-1 px-4 py-2 text-left">
+                    <label class="text-xs font-bold text-gray-400 uppercase">Jenis Paket</label>
+                    <select class="w-full bg-transparent font-bold text-gray-800 focus:outline-none cursor-pointer mt-1">
+                        <option>Reguler & Plus</option>
+                        <option>Umroh Reguler</option>
+                        <option>Umroh Plus Turki</option>
+                    </select>
+                </div>
+                <button class="bg-primary-800 hover:bg-primary-900 text-white rounded-xl px-8 py-3 font-bold transition shadow-lg">
+                    Cari
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section id="packages" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary-900 mb-4">Paket Umroh Pilihan</h2>
+            <div class="h-1 w-24 bg-gold-500 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <template x-for="pkg in packages" :key="pkg.id">
+                <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300 relative flex flex-col">
+                    
+                    <button @click="toggleWishlist(pkg.id)" 
+                            class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-md transition hover:scale-110">
+                        <svg class="w-6 h-6 transition duration-300" 
+                             :class="isInWishlist(pkg.id) ? 'fill-red-500 text-red-500' : 'fill-transparent text-gray-400 hover:text-red-500'"
+                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </button>
+
+                    <div class="relative h-64 overflow-hidden cursor-pointer" @click="openModal(pkg)">
+                        <img :src="pkg.featured_image" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span x-show="pkg.is_featured" class="bg-gold-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Featured</span>
+                            <span class="bg-primary-800 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm" x-text="pkg.duration_days + ' Hari'"></span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 pt-10">
+                            <p class="text-gold-400 text-xs font-bold uppercase tracking-wider mb-1" x-text="'Keberangkatan: ' + formatDate(pkg.departure_date)"></p>
+                            <h3 class="text-xl font-serif font-bold text-white leading-tight" x-text="pkg.title"></h3>
+                        </div>
+                    </div>
+
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="space-y-3 mb-6 text-sm text-gray-600">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 flex justify-center"><span class="text-lg">🕋</span></div>
+                                <div>
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold">Makkah</p>
+                                    <p class="font-semibold text-primary-900 line-clamp-1" x-text="pkg.hotel_makkah"></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 flex justify-center"><span class="text-lg">🕌</span></div>
+                                <div>
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold">Madinah</p>
+                                    <p class="font-semibold text-primary-900 line-clamp-1" x-text="pkg.hotel_madinah"></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 flex justify-center"><span class="text-lg">✈️</span></div>
+                                <div>
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold">Maskapai</p>
+                                    <p class="font-semibold text-primary-900 line-clamp-1" x-text="pkg.airline_name"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-between items-end">
+                            <div>
+                                <p class="text-xs text-gray-400 mb-1">Mulai dari (Quad)</p>
+                                <p class="text-2xl font-bold text-primary-800" x-text="formatRupiah(pkg.price_quad)"></p>
+                            </div>
+                            <button @click="openModal(pkg)" class="w-10 h-10 rounded-full border border-primary-800 text-primary-800 flex items-center justify-center hover:bg-primary-800 hover:text-white transition">
+                                ➜
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </section>
+
+    <section class="bg-white py-20 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-gray-900">Kata Jamaah</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <template x-for="testi in testimonials" :key="testi.id">
+                    <div class="bg-sand p-8 rounded-2xl relative">
+                        <div class="text-gold-400 text-4xl font-serif absolute top-4 left-4">“</div>
+                        <p class="text-gray-600 italic mb-6 relative z-10" x-text="testi.content"></p>
+                        <div class="flex items-center gap-4">
+                            <img :src="testi.avatar_url" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm">
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-sm" x-text="testi.name"></h4>
+                                <p class="text-xs text-gray-500" x-text="testi.job_title"></p>
+                            </div>
+                            <div class="ml-auto flex text-gold-400 text-xs">
+                                <template x-for="i in testi.rating"><span>★</span></template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-primary-900 text-white py-12 border-t-4 border-gold-500">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h3 class="font-serif text-2xl font-bold mb-4">Lathifa Tour</h3>
+            <p class="text-gray-300 text-sm mb-8">Sahabat Perjalanan Ibadah Anda Menuju Baitullah.</p>
+            <p class="text-gray-400 text-xs">&copy; 2025 PT Lathifa Tour & Travel. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div x-show="selectedPkg" class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div x-show="selectedPkg" x-transition.opacity class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm transition-opacity"></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div x-show="selectedPkg" 
+                     @click.outside="selectedPkg = null"
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-5xl">
+                    
+                    <template x-if="selectedPkg">
+                        <div class="flex flex-col lg:flex-row h-full max-h-[90vh]">
+                            <div class="lg:w-5/12 bg-gray-100 relative flex flex-col">
+                                <div class="h-64 lg:h-3/4 relative">
+                                    <img :src="activeImage || selectedPkg.featured_image" class="w-full h-full object-cover transition duration-300">
+                                    <button @click="selectedPkg = null" class="absolute top-4 left-4 bg-black/50 text-white p-2 rounded-full lg:hidden">✕</button>
+                                </div>
+                                <div class="h-auto lg:h-1/4 bg-primary-900 p-4 flex gap-3 overflow-x-auto hide-scrollbar">
+                                    <img :src="selectedPkg.featured_image" 
+                                         @click="activeImage = selectedPkg.featured_image"
+                                         class="h-full aspect-square object-cover rounded-lg cursor-pointer border-2"
+                                         :class="activeImage === selectedPkg.featured_image ? 'border-gold-500' : 'border-transparent opacity-60 hover:opacity-100'">
+                                         
+                                    <template x-for="img in selectedPkg.galleries" :key="img.id">
+                                        <img :src="img.image_url" 
+                                             @click="activeImage = img.image_url"
+                                             class="h-full aspect-square object-cover rounded-lg cursor-pointer border-2"
+                                             :class="activeImage === img.image_url ? 'border-gold-500' : 'border-transparent opacity-60 hover:opacity-100'">
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class="lg:w-7/12 p-6 lg:p-8 overflow-y-auto custom-scrollbar bg-white relative">
+                                <button @click="selectedPkg = null" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hidden lg:block">
+                                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+
+                                <div class="mb-6">
+                                    <span class="text-primary-800 font-bold text-sm uppercase tracking-wider mb-1 block" x-text="selectedPkg.duration_days + ' HARI PERJALANAN'"></span>
+                                    <h2 class="text-3xl font-serif font-bold text-gray-900 leading-tight mb-2" x-text="selectedPkg.title"></h2>
+                                    <p class="text-gray-500 text-sm leading-relaxed" x-text="selectedPkg.description"></p>
+                                </div>
+
+                                <div class="bg-sand rounded-xl p-4 mb-8 border border-gold-500/20">
+                                    <h3 class="font-bold text-primary-900 mb-3 text-sm uppercase flex items-center">
+                                        <span class="w-2 h-2 rounded-full bg-gold-500 mr-2"></span> Pilihan Kamar
+                                    </h3>
+                                    <div class="grid grid-cols-3 gap-2 md:gap-4 text-center">
+                                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                                            <div class="text-[10px] text-gray-400 font-bold uppercase">Quad (4)</div>
+                                            <div class="text-primary-800 font-bold text-sm md:text-base" x-text="formatRupiah(selectedPkg.price_quad)"></div>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                                            <div class="text-[10px] text-gray-400 font-bold uppercase">Triple (3)</div>
+                                            <div class="text-primary-800 font-bold text-sm md:text-base" x-text="formatRupiah(selectedPkg.price_triple)"></div>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                                            <div class="text-[10px] text-gray-400 font-bold uppercase">Double (2)</div>
+                                            <div class="text-primary-800 font-bold text-sm md:text-base" x-text="formatRupiah(selectedPkg.price_double)"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-8">
+                                    <h3 class="font-bold text-gray-900 mb-4 font-serif text-lg">Rencana Perjalanan</h3>
+                                    <div class="border-l-2 border-primary-100 ml-2 space-y-6 pl-6 relative">
+                                        <template x-for="day in selectedPkg.itineraries" :key="day.day_number">
+                                            <div class="relative">
+                                                <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full border-2 border-white shadow-sm bg-primary-500"></div>
+                                                <div class="text-xs font-bold text-primary-500 mb-1" x-text="'Hari ke-' + day.day_number"></div>
+                                                <div class="font-bold text-gray-900 text-sm mb-1" x-text="day.title"></div>
+                                                <div class="text-xs text-gray-500 leading-relaxed" x-text="day.description"></div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <div class="sticky bottom-0 bg-white/95 backdrop-blur pt-4 border-t border-gray-100 mt-auto">
+                                    <button @click="bookViaWA(selectedPkg)" class="w-full py-4 bg-primary-800 hover:bg-primary-900 text-white rounded-xl font-bold shadow-lg transition transform hover:-translate-y-1 flex justify-center items-center gap-2">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                                        Book via WhatsApp
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function lathifaApp() {
+            return {
+                scrolled: false,
+                selectedPkg: null,
+                activeImage: null,
+                wishlist: [], // Local state for bookmarks
+
+                // Data Dummy Sesuai ERD Final
+                packages: [
+                    {
+                        id: 1,
+                        title: "Awal Ramadhan 1446H Premium",
+                        slug: "awal-ramadhan-premium",
+                        price_quad: 34500000,
+                        price_triple: 36000000,
+                        price_double: 38500000,
+                        departure_date: "2025-03-01",
+                        duration_days: 9,
+                        hotel_makkah: "Movenpick Hajar Tower",
+                        hotel_madinah: "Ruve Al Madinah",
+                        airline_name: "Saudia Airlines",
+                        featured_image: "https://images.unsplash.com/photo-1564121211835-e88c852648ab?q=80&w=1000&auto=format&fit=crop",
+                        description: "Paket spesial menyambut bulan suci Ramadhan di Tanah Suci. Nikmati suasana syahdu berbuka puasa di pelataran Masjid Nabawi dan Masjidil Haram.",
+                        is_featured: true,
+                        // Relasi: itineraries
+                        itineraries: [
+                            { day_number: 1, title: "Jakarta - Jeddah", description: "Take off dari Soekarno Hatta, landing di Jeddah, ambil miqat, menuju Makkah." },
+                            { day_number: 2, title: "Makkah - Umroh 1", description: "Pelaksanaan Umroh Wajib dipandu Muthawif." },
+                            { day_number: 3, title: "Makkah - Ibadah Mandiri", description: "Memperbanyak tawaf sunnah dan i'tikaf." }
+                        ],
+                        // Relasi: package_galleries
+                        galleries: [
+                            { id: 101, image_url: "https://images.unsplash.com/photo-1597764455001-b63749a54730?q=80&w=800", caption: "Hotel Lobby" },
+                            { id: 102, image_url: "https://images.unsplash.com/photo-1580418827493-f2b22c438568?q=80&w=800", caption: "View Kaaba" },
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: "Lathifa Syawal Hemat",
+                        slug: "syawal-hemat",
+                        price_quad: 28500000,
+                        price_triple: 30000000,
+                        price_double: 31500000,
+                        departure_date: "2025-05-10",
+                        duration_days: 9,
+                        hotel_makkah: "Anjum Hotel",
+                        hotel_madinah: "Concorde Madinah",
+                        airline_name: "Lion Air Premium",
+                        featured_image: "https://images.unsplash.com/photo-1551041777-ed02bed74b47?q=80&w=1000&auto=format&fit=crop",
+                        description: "Merayakan kemenangan Idul Fitri dengan berumroh. Paket hemat dengan fasilitas tetap nyaman.",
+                        is_featured: false,
+                        itineraries: [
+                            { day_number: 1, title: "Jakarta - Madinah", description: "Direct flight ke Madinah." },
+                            { day_number: 2, title: "Madinah - Ziarah", description: "Ziarah Raudhah dan makam Rasulullah SAW." }
+                        ],
+                        galleries: [
+                             { id: 201, image_url: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=800", caption: "Masjid Nabawi" }
+                        ]
+                    }
+                ],
+
+                // Data Testimonials (Table testimonials)
+                testimonials: [
+                    { id: 1, name: "H. Budi Santoso", job_title: "Pengusaha", content: "Sangat puas dengan pelayanan Lathifa Tour. Hotelnya benar-benar dekat.", rating: 5, avatar_url: "https://i.pravatar.cc/150?u=budi" },
+                    { id: 2, name: "Hj. Siti Aminah", job_title: "Ibu Rumah Tangga", content: "Muthawifnya sabar membimbing orang tua kami.", rating: 5, avatar_url: "https://i.pravatar.cc/150?u=siti" }
+                ],
+
+                initApp() {
+                    console.log('App Initialized with New ERD Structure');
+                },
+
+                openModal(pkg) {
+                    this.selectedPkg = pkg;
+                    this.activeImage = pkg.featured_image;
+                },
+
+                // Logic for 'bookmarks' table simulation
+                toggleWishlist(id) {
+                    if (this.wishlist.includes(id)) {
+                        this.wishlist = this.wishlist.filter(i => i !== id);
+                    } else {
+                        this.wishlist.push(id);
+                    }
+                },
+                isInWishlist(id) {
+                    return this.wishlist.includes(id);
+                },
+
+                // Logic for 'package_inquiries' table simulation
+                bookViaWA(pkg) {
+                    const phone = "6281234567890";
+                    // Simulasi data guest_name/guest_phone belum diisi (user tamu)
+                    const text = `Assalamualaikum, saya tertarik dengan paket ${pkg.title} (Quad: ${this.formatRupiah(pkg.price_quad)}). Mohon info ketersediaan seat.`;
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+                },
+
+                formatRupiah(number) {
+                    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+                },
+                formatDate(dateString) {
+                    return new Date(dateString).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                }
+            }
+        }
+    </script>
+</body>
+</html>

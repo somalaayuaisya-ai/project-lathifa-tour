@@ -1,0 +1,101 @@
+@import 'trix/dist/trix.css';
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/usernotnull/tall-toasts/config/**/*.php';
+@source '../../vendor/usernotnull/tall-toasts/resources/views/**/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source './resources/views/**/*.blade.php';
+@source './resources/js/**/*.js';
+
+@theme {
+    /* Brand Colors (Lathifa Tour Signature) */
+    --color-primary-50: #f0fdfa;
+    --color-primary-100: #ccfbf1;
+    --color-primary-500: #14b8a6;    /* Teal Base */
+    --color-primary-600: #0d9488;
+    --color-primary-800: #115e59;    /* Deep Teal */
+    --color-primary-900: #0f4c48;    /* Darkest Teal */
+
+    --color-gold-200: #fde68a;       /* Light Gold for gradient */
+    --color-gold-400: #fbbf24;
+    --color-gold-500: #f59e0b;       /* Gold Base */
+    --color-gold-600: #d97706;
+
+    --color-sand: #FFFCF2;           /* Background Warm */
+
+    /* Typography */
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+
+    /* Box Shadow */
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 0 15px rgba(20, 184, 166, 0.3);
+
+    /* Extra colors from dashboard */
+    --color-blue-50: #eff6ff;
+    --color-blue-600: #2563eb;
+    --color-blue-700: #1d4ed8;
+}
+
+/* Custom Utilities & Components */
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    /* Semantic Titles */
+    .section-title {
+        @apply text-3xl md:text-4xl font-serif font-bold text-primary-900 mb-4;
+    }
+    .section-divider {
+        @apply h-1 w-24 bg-gold-500 mx-auto rounded-full;
+    }
+
+    /* Card Component */
+    .card {
+        @apply bg-white rounded-3xl border border-gray-100 shadow-lg transition-all duration-300;
+    }
+
+    /* Button Component */
+    .btn {
+        @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-bold text-sm transition-all duration-200 transform focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+    .btn-primary {
+        @apply bg-primary-800 text-white shadow-lg hover:bg-primary-900 hover:-translate-y-0.5 focus:ring-primary-800;
+    }
+    .btn-secondary {
+        @apply bg-white text-primary-900 shadow-lg hover:bg-gray-100 hover:-translate-y-0.5 focus:ring-primary-800;
+    }
+    .btn-outline {
+        @apply border border-primary-800 text-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-800;
+    }
+    .btn-icon {
+        @apply w-10 h-10 p-0 rounded-full flex items-center justify-center;
+    }
+}
+
+@layer utilities {
+    .text-gradient {
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        background-image: linear-gradient(to right, theme('colors.gold.400'), theme('colors.gold.200'));
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #0f4c48; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #14b8a6; }
+
